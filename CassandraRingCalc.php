@@ -44,7 +44,6 @@ if(!isset($_POST['Reset'])){
 				$class = "odd";
 				if($i % 2 == 0){$class = "even";}
 				echo "<div class='$class'>Node:" . $i . "<br/>initial_token: " . number_format(pow(2,127)*$i/$count,0, '', '') . '</div>';
-				//echo "<br/>";
 			}
 		}
 		else{
