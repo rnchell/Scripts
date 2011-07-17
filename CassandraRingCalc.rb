@@ -1,4 +1,3 @@
-$i = 0;
 $num = 0;
 if ARGV.length > 0 && (Integer(ARGV[0]) rescue false)
 	$num = Integer(ARGV[0])
