@@ -80,7 +80,7 @@ def nts_tokens():
 				print("Node:", n)
 				print("\tinitial_token:", tokens[n])
 		else:
-			error("output flag is greater than number of datacenters")
+			error("output arg is greater than number of datacenters")
 			usage()
 	else:
 		increment = 0
