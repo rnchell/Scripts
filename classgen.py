@@ -16,6 +16,8 @@
 # limitations under the License.
 
 import sys,getopt,os
+
+#Writes out standard apache license header
 def write_header():
 	s = '''#!/usr/bin/python
 # Licensed to the Apache Software Foundation (ASF) under one
@@ -35,10 +37,13 @@ def write_header():
 # limitations under the License.
 '''
 	return s
+#writes out class name based on the -c or --class argument
 def create_class(c):
 	return '''
 class %s:''' % c
 
+#writes out method for each argument for the -m or --methods command
+#adds self as default first parameter if none are specified
 def create_method(m):
 	method = '%s(self)' % m
 	if '()' in m or '(' in m or ')' in m:
@@ -48,18 +53,26 @@ def create_method(m):
 		pass''' % (method)
 	return s
 
+#entry point
 def main():
 	title = "class"
-	path = '.\\' #check for os?
+	if os.name in ['posix', 'os2']:
+		path = './'
+	else:
+		path = '.\\'
 	methods = []
 	overwrite = False
 	classname = 'class'
 	opts, args = getopt.getopt(sys.argv[1:], "p:t:c:m:o", ["path=","title=","class=","overwrite","methods="])
 	for opt, arg in opts:
 		if opt in ['--methods','-m']:
-			for a in arg.split(','):
-				a = methods.append(a.replace('@',','))
-				#create_class(a.replace('.',','))
+			#multiple methods can be passed in delimited by commas
+			for a in arg.split('/'):
+				#methods that require parameters can be added delimited by @ symbol
+				# example:
+				#	-m init,__str__,my_method(self@x@y='test')
+				#methods.append(a.replace('.',','))
+				methods.append(a)
 		if opt in ['--title','-t']:
 			title = arg
 		if opt in ['-o','--overwrite']:
@@ -67,6 +80,8 @@ def main():
 			overwrite = True
 		if opt in ['-c','--classes']:
 			classname = arg
+		if opt in ['-p', '--path']:
+			path = arg
 	filename = '%s/%s.py' % (path,title)
 	if not os.path.exists(filename) or overwrite:
 		#print("WRITING....")
