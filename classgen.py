@@ -19,7 +19,7 @@ import sys,getopt,os
 
 #Writes out standard apache license header
 def write_header():
-	s = '''#!/usr/bin/python
+	s = '''
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements. See the NOTICE file
 # distributed with this work for additional information
@@ -55,16 +55,19 @@ def create_method(m):
 
 #entry point
 def main():
-	title = "class"
+	filename = "newclass"
 	if os.name in ['posix', 'os2']:
 		path = './'
 	else:
 		path = '.\\'
 	methods = []
 	overwrite = False
-	classname = 'class'
-	opts, args = getopt.getopt(sys.argv[1:], "p:t:c:m:o", ["path=","title=","class=","overwrite","methods="])
+	classname = '***EMPTY***'
+	includeHeader = False
+	opts, args = getopt.getopt(sys.argv[1:], "p:f:c:m:oh", ["path=","filename=","class=","overwrite","header","methods="])
 	for opt, arg in opts:
+		if opt in ['-h','--header']:
+			includeHeader = True
 		if opt in ['--methods','-m']:
 			#multiple methods can be passed in delimited by commas
 			for a in arg.split('/'):
@@ -73,20 +76,22 @@ def main():
 				#	-m init,__str__,my_method(self@x@y='test')
 				#methods.append(a.replace('.',','))
 				methods.append(a)
-		if opt in ['--title','-t']:
-			title = arg
+		if opt in ['--filename','-f']:
+			filename = arg
 		if opt in ['-o','--overwrite']:
 			#print("OVERWRITE")
 			overwrite = True
-		if opt in ['-c','--classes']:
+		if opt in ['-c','--class']:
 			classname = arg
 		if opt in ['-p', '--path']:
 			path = arg
-	filename = '%s/%s.py' % (path,title)
+	filename = '%s/%s.py' % (path,filename)
 	if not os.path.exists(filename) or overwrite:
 		#print("WRITING....")
 		file = open(filename,'w')
-		file.write(write_header())
+		file.write("#!/usr/bin/python")
+		if includeHeader:
+			file.write(write_header())
 		file.write(create_class(classname))
 		for s in methods:
 			file.write(create_method(s))
