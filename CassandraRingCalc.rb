@@ -1,4 +1,4 @@
-/*
+=begin
 Copyright 2011, Buddy Chell
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +18,7 @@ the token ranges you can use on each of your nodes to balance.
 
 You can read more here:
 http://wiki.apache.org/cassandra/Operations#Load_balancing
-*/
-
-// CassandraRingCalc.rb
+=end
 
 $num = 0;
 if ARGV.length > 0 && (Integer(ARGV[0]) rescue false)
